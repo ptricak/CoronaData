@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{67617022-EB27-4A4E-A46B-D8D43573BDD2}|Default">
   <MonoDevelop.Ide.ItemProperties.CoronaData PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CoronaData/Mappers/MappingHelpers.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CoronaData/wwwroot/DataFiles/agTestData.csv">
     <Files>
       <File FileName="CoronaData/Controllers/CoronaDataController.cs" Line="121" Column="1" />
       <File FileName="CoronaData/Mappers/CsvCovidAutomatCoronaDataMapping.cs" />
-      <File FileName="CoronaData/Mappers/MappingHelpers.cs" Line="58" Column="1" />
+      <File FileName="CoronaData/Mappers/MappingHelpers.cs" Line="68" Column="29" />
       <File FileName="CoronaData/Program.cs" />
+      <File FileName="CoronaData/wwwroot/DataFiles/agTestData.csv" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,15 +15,14 @@
             <Node name="CoronaData" expanded="True">
               <Node name="Dependencies" expanded="True" />
               <Node name="Controllers" expanded="True" />
-              <Node name="Mappers" expanded="True">
-                <Node name="MappingHelpers.cs" selected="True" />
-              </Node>
+              <Node name="Mappers" expanded="True" />
               <Node name="Views" expanded="True">
                 <Node name="CoronaData" expanded="True" />
-                <Node name="Shared" expanded="True" />
               </Node>
               <Node name="wwwroot" expanded="True">
-                <Node name="DataFiles" expanded="True" />
+                <Node name="DataFiles" expanded="True">
+                  <Node name="agTestData.csv" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
