@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Peter Tričák">
+    <meta name="keywords" content="obec Čertižné, korona, korona data, korona Medzilaborce, korona Humenne, covid 19" />
+    <meta name="description" content="CoronaData - stranka venovana analyze CoronaDat" />
+    <link rel="icon" type="image/png" href="https://certizne.eu/userfiles/image/favicon.png" />
+    <title>CoronaData - @ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
+    <script src="~/js/paging.js"></script>
+    <!-- Custom fonts for this template-->
+    <link href="~/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Page Wrapper -->
+    <div id="wrapper" class="container">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <main role="main" class="pb-3">
+                <!-- Main Content -->
+                <div id="content">
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">                     
+                        @RenderBody()
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+            </main>
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <script src="~/js/Chart.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="~/js/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>window.bChat = {
+            "showChatNote": false,
+            'image': 'https://cdn.covid.chat/logo.png',
+            'text': 'Dôležité informácie o koronavíruse (COVID-19)',
+            "autoOpen": false,
+            "noAutoInit": false,
+            "noHistory": true,
+            "exitButton": true,
+            "skipWelcome": true,
+            "force": true,
+            "ref": "welcome"
+        };
+        (function (d, s, id) {
+            var js, bjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.async = true; js.id = id;
+            js.src = "https://cdn.covid.chat/chat.js";
+            bjs.parentNode.insertBefore(js, bjs);
+        }(document, 'script', 'bmedia'));</script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q1XCZ6N6S3"></script>
+    <script>window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-Q1XCZ6N6S3');</script>
+</body>
+</html>

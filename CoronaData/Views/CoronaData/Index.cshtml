@@ -1,0 +1,721 @@
+﻿@model CoronaData.Models.DataVisualisationModel
+@using System.Linq
+
+@{
+    //Title setup
+    ViewBag.Title = Model.SelectedDistrict;
+
+    //AG - 14 days
+    var agDates_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysAG.Select(x => x.DateString).ToList());
+    var agTotalCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysAG.Select(x => x.AgTotalCount).ToList());
+    var agPositiveCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysAG.Select(x => x.AgPosCount).ToList());
+
+    //PCR - 14 days
+    var pcrDates_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCR.Select(x => x.DateString).ToList());
+    var pcrTotalCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCR.Select(x => x.PcrTotalCount).ToList());
+    var pcrPositiveCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCR.Select(x => x.PcrPosCount).ToList());
+
+    //PCR + AG - 14 days
+    var pcrAgDates_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCRAG.Select(x => x.DateString).ToList());
+    var pcrAgTotalCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCRAG.Select(x => x.PcrAgTotalCount).ToList());
+    var pcrAgPositiveCounts_14days = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Last14DaysPCRAG.Select(x => x.PcrAgPosCount).ToList());
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
+    <h1 class="h3 mb-0 text-danger-800">CoronaData - <b>@Model.SelectedDistrict</b></h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-12" style="margin-bottom: 10px;">
+        <b>Výber okresu:</b>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Medzilaborce") ? "active" : "not-active")" title="Medzilaborce" href="/CoronaData/Medzilaborce">Medzilaborce</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Humenné") ? "active" : "not-active")" title="Humenne" href="/CoronaData/Humenne">Humenné</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Snina") ? "active" : "not-active")" title="Snina" href="/CoronaData/Snina">Snina</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Stropkov") ? "active" : "not-active")" title="Stropkov" href="/CoronaData/Stropkov">Stropkov</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Svidník") ? "active" : "not-active")" title="Svidnik" href="/CoronaData/Svidnik">Svidnik</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a class="btn btn-danger district-button @((Model.SelectedDistrict == "Okres Spišská Nová Ves") ? "active" : "not-active")" title="SpisskaNovaVes" href="/CoronaData/SpisskaNovaVes">Spišská Nová Ves</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1" style="color: #e74a3b">
+                            Počet vykonaných AG testov
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.LastDayAGData.TotalCount</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope-open fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-danger">
+                            Dňa @Model.LastDayAGData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Počet pozitívnych AG testov
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@Model.LastDayAGData.PosCount</div>
+                            </div>
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                         style="width: @Model.LastDayAGData.PositivePercentageString" aria-valuenow="@Model.LastDayAGData.PositivePercentage" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-danger">
+                            Dňa @Model.LastDayAGData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="color: #e74a3b">
+                            Počet vykonaných PCR testov
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.LastDayPCRData.TotalCount</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope-open fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-warning">
+                            Dňa @Model.LastDayPCRData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Počet pozitívnych PCR testov
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@Model.LastDayPCRData.PosCount</div>
+                            </div>
+                            <div class="col">
+                                <div class="progress progress-sm mr-2">
+                                    <div class="progress-bar bg-warning" role="progressbar"
+                                         style="width: @Model.LastDayPCRData.PositivePercentageString" aria-valuenow="@Model.LastDayPCRData.PositivePercentage" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-warning">
+                            Dňa @Model.LastDayPCRData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Aktuálna sedemdňová incidencia
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@Model.LastCovidAutomatData.SevenDaysIncidencyActual</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-address-card-o fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-danger">
+                            CovidAutomat ku dňu @Model.LastCovidAutomatData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1" style="color: #e74a3b">
+                            Predchádzajúca sedemdňová incidencia
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.LastCovidAutomatData.SevenDaysIncidencyBefore</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-address-card fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-danger">
+                            CovidAutomat ku dňu @Model.LastCovidAutomatData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="color: #e74a3b">
+                            Počet obyvateľov okresu
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.LastCovidAutomatData.DistrictPopulation</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Počet reportovaných hospitalizácií
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@Model.LastCovidAutomatData.Hospitalisation</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-h-square fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-xs text-warning">
+                            CovidAutomat ku dňu @Model.LastCovidAutomatData.DateString
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">AG testy - 14 dňový prehľad</h6>
+            </div>
+            <div class="card-body">
+                <!-- AG 14 days page element holder -->
+                <div class="chart-container">
+                    <canvas id="ag14days" style="width:100%; height:500px"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">AG pozitívne testy - 14 dňový prehľad</h6>
+            </div>
+            <div class="card-body">
+                <!-- AG 14 days page element holder -->
+                <div class="chart-container">
+                    <canvas id="agPos14days" style="width:100%; height:500px"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-warning">PCR testy - 14 dňový prehľad</h6>
+            </div>
+            <div class="card-body">
+                <!-- PCR 14 days page element holder -->
+                <div class="chart-container">
+                    <canvas id="pcr14days" style="width:100%; height:500px"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">PCR + AG testy - 14 dňový prehľad</h6>
+            </div>
+            <div class="card-body">
+                <!-- Combined PCR + AG 14 days page element holder -->
+                <div class="chart-container">
+                    <canvas id="pcrAg14days" style="width:100%; height:500px"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-6">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">AG testy - história</h6>
+            </div>
+            <div class="card-body">
+                <!-- All AG data table -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped table-light ag-complete-table">
+                        <thead>
+                            <tr class="table-danger">
+                                <th scope="col">Dátum</th>
+                                <th scope="col" class="break-word">Počet testov</th>
+                                <th scope="col" class="break-word">Počet pozitívnych</th>
+                                <th scope="col" class="break-word">Počet negatívnych</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var dataItem in Model.AllDataAG)
+                            {
+                                <tr>
+                                    <td>@dataItem.DateString</td>
+                                    <td>@dataItem.AgTotalCount</td>
+                                    <td>@dataItem.AgPosCount</td>
+                                    <td>@dataItem.AgNegCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-warning">PCR testy - história</h6>
+            </div>
+            <div class="card-body">
+                <!-- All PCR data table -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped table-light pcr-complete-table">
+                        <thead>
+                            <tr class="table-warning">
+                                <th scope="col">Dátum</th>
+                                <th scope="col" class="break-word">Počet testov</th>
+                                <th scope="col" class="break-word">Počet pozitívnych</th>
+                                <th scope="col" class="break-word">Počet negatívnych</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var dataItem in Model.AllDataPCR)
+                            {
+                                <tr>
+                                    <td>@dataItem.DateString</td>
+                                    <td>@dataItem.PcrTotalCount</td>
+                                    <td>@dataItem.PcrPosCount</td>
+                                    <td>@dataItem.PcrNegCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@if (Model.SelectedDistrict == "Okres Medzilaborce")
+{
+    <!-- Content Row -->
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-danger">Testovacie miesta v Medzilaborciach</h6>
+
+                    <ul style="margin-top: 10px;">
+                        <li>
+                            <b>Ulica A. Warhola - parkovisko kultúrny dom</b> (DZS – M.K. TRANS ,s.r.o.) / je potrebné sa objednať<br />
+                            Čas testovania: <b>8:00</b> – <b>12:00</b> a <b>12:30</b> - <b>16:30</b>
+                        </li>
+                        <li>
+                            <b>Ulica Mierová - TJ Spartak</b> (Lemar Bau ,s.r.o.) / bez objednania<br />
+                            Čas testovania:  <b>08:00</b> - <b>12:00</b> a <b>13:00</b> – <b>17:00</b>
+                        </li>
+                        <li>
+                            <b>Ulica Mierová - areál amfiteátra</b> (Detský Ados, s.r.o.) / bez objednania<br />
+                            Čas testovania: <b>10:00</b> – <b>13:30</b> a <b>14:30</b> – <b>18:00</b>
+                        </li>
+                    </ul>
+                    Všetky testovacie miesta sú otvorené 7 dní v týždni.
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+<!-- Content Row -->
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 row row-margin">
+                <div class="col-lg-10 col-sm-8 col-8 col-xs-8">
+                    <h6 class="m-0 font-weight-bold text-danger">O stránke</h6>
+                    Dáta sú získavané spracovaním surových údajov zo stránky <a href="https://korona.gov.sk" target="_blank" title="korona.gov">korona.gov.sk</a>. Údaje na stránke sa aktualizujú automaticky po aktualizácii dát na štátnych serveroch. Dáta majú len informačný charakter!<br />
+                    <br />
+                    Stránka a výpočty bežia na serveroch <a href="https://certizne.eu" title="certizne" target="_blank">Obce Čertižné!</a>
+                    <br />
+                    &copy; 2021 - Ing. Peter Tričák
+                </div>
+                <div class="col-lg-2 col-sm-4 col-4 col-xs-8 footer-box"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- PCR 14 days report -->
+<script type="text/javascript">
+    $(function () {
+
+    var chartName = "pcr14days";
+        var pcr14days = document.getElementById(chartName).getContext('2d');
+        var dataPcr14Days = {
+                labels: @Html.Raw(pcrDates_14days),
+                datasets: [{
+                    label: "PCR testy - celkový počet",
+                    order: 1,
+                    borderWidth: 1,
+                    data: @Html.Raw(pcrTotalCounts_14days)
+                    },
+                    {
+                    label: "PCR testy - počet pozitívnych",
+                        order: 2,
+                        borderColor: "rgba(247,202,24,1)",
+                        backgroundColor: "gba(226,106,106,1)",
+                    type: 'line',
+                    data: @Html.Raw(pcrPositiveCounts_14days)
+                    }]
+            };
+
+var optionsPcr14Days = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+        var pcr14days = new Chart(pcr14days, {
+                options: optionsPcr14Days,
+                data: dataPcr14Days,
+                type:'bar'
+
+            });
+        });
+</script>
+
+<!-- AG 14 days report -->
+<script type="text/javascript">
+    $(function () {
+
+    var chartName = "ag14days";
+        var ag14days = document.getElementById(chartName).getContext('2d');
+        var dataAg14Days = {
+                labels: @Html.Raw(agDates_14days),
+                datasets: [{
+                    label: "AG testy - celkový počet",
+                    order: 1,
+                    borderWidth: 1,
+                    data: @Html.Raw(agTotalCounts_14days)
+                    },
+                    {
+                    label: "AG testy - počet pozitívnych",
+                    order: 2,
+                        type: 'line',
+                        borderColor: "rgba(240,52,52,1)",
+                        backgroundColor: "gba(226,106,106,1)",
+                    data: @Html.Raw(agPositiveCounts_14days)
+                    }]
+            };
+
+var optionsAg14Days = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+        var ag14days = new Chart(ag14days, {
+                options: optionsAg14Days,
+                data: dataAg14Days,
+                type:'bar'
+
+            });
+        });
+</script>
+
+<!-- AG Positive 14 days report -->
+<script type="text/javascript">
+    $(function () {
+
+    var chartName = "agPos14days";
+        var agPos14days = document.getElementById(chartName).getContext('2d');
+        var dataAgPos14Days = {
+                labels: @Html.Raw(agDates_14days),
+                datasets: [{
+                    label: "AG testy - počet pozitívnych",
+                    order: 1,
+                    borderWidth: 1,
+                    data: @Html.Raw(agPositiveCounts_14days)
+                    }]
+            };
+
+    var optionsAgPos14Days = {
+        maintainAspectRatio: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    beginAtZero: true
+                },
+                gridLines: {
+                    display: true,
+                    color: "rgba(255,99,164,0.2)"
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    min: 0,
+                    beginAtZero: true
+                },
+                gridLines: {
+                    display: false
+                }
+            }]
+        }
+            };
+
+        var agPos14days = new Chart(agPos14days, {
+                options: optionsAgPos14Days,
+                data: dataAgPos14Days,
+                type:'bar'
+
+            });
+        });
+</script>
+
+<!-- Combined PCR + AG 14 days report -->
+<script type="text/javascript">
+    $(function () {
+
+    var chartName = "pcrAg14days";
+        var pcrAg14days = document.getElementById(chartName).getContext('2d');
+        var dataPcrAg14Days = {
+                labels: @Html.Raw(pcrAgDates_14days),
+                datasets: [{
+                    label: "PCR + AG testy - celkový počet",
+                    order: 1,
+                    borderWidth: 1,
+                    data: @Html.Raw(pcrAgTotalCounts_14days)
+                    },
+                    {
+                    label: "PCR + AG testy - počet pozitívnych",
+                    order: 2,
+                        type: 'line',
+                        borderColor: "rgba(240,52,52,1)",
+                        backgroundColor: "gba(226,106,106,1)",
+                    data: @Html.Raw(pcrAgPositiveCounts_14days)
+                    }]
+            };
+
+var optionsPcrAg14Days = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+        var pcrAg14days = new Chart(pcrAg14days, {
+                options: optionsPcrAg14Days,
+                data: dataPcrAg14Days,
+                type:'bar'
+
+            });
+        });
+</script>
+
+<script type="text/javascript">$(document).ready(function () {
+        $('.ag-complete-table').paging({ limit: 10 });
+        $('.pcr-complete-table').paging({ limit: 10 });
+    });</script>

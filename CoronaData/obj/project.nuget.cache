@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "CTfgKO1vz+/SXr0cp+0jGTbcuBWGqWfXPHUEiw2eT6ceOflsUTAHEj146/67fBmG4teEMDTjN+PiCTKj+uFphQ==",
+  "success": true,
+  "projectFilePath": "/Users/Peter/Projects/CoronaData/CoronaData/CoronaData.csproj",
+  "expectedPackageFiles": [
+    "/Users/Peter/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
+    "/Users/Peter/.nuget/packages/tinycsvparser/2.6.0/tinycsvparser.2.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}
