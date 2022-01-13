@@ -10,10 +10,10 @@ namespace CoronaData.Mappers
             MapProperty(0, p => p.Date, new SlovakStringDateToDateTypeConverter());
             MapProperty(1, p => p.DistrictCode);
             MapProperty(2, p => p.District, new StringWithoutQuotesWithDistrictTypeConverter());
-            MapProperty(5, p => p.DistrictPopulation, new StringToIntTypeConverter());
-            MapProperty(12, p => p.SevenDaysIncidencyActual, new StringToIntTypeConverter());
-            MapProperty(13, p => p.SevenDaysIncidencyBefore, new StringToIntTypeConverter());
-            MapProperty(17, p => p.Hospitalisation, new StringToIntTypeConverter());
+            MapProperty(5, p => p.DistrictPopulation, new PopulationStringToIntTypeConverter());
+            MapProperty(10, p => p.SevenDaysIncidencyActual, new StringToIntTypeConverter());
+            MapProperty(11, p => p.SevenDaysIncidencyBefore, new StringToIntTypeConverter());
+            MapProperty(17, p => p.Vaccination_Full);
         }
     }
 }

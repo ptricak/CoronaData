@@ -98,7 +98,7 @@ namespace CoronaData.Controllers
 
             IEnumerable<AG_TestData_line> selectedDistrictOnlyAgData = null;
             IEnumerable<PCR_TestData_line> selectedDistrictOnlyPcrData = null;
-            CovidAutomat_TestData_line selectedDistrictOnlyCovidAutomatData = new CovidAutomat_TestData_line { Date = DateTime.Now, Hospitalisation = 0, SevenDaysIncidencyActual = 0, SevenDaysIncidencyBefore = 0, DistrictPopulation = 0 };
+            CovidAutomat_TestData_line selectedDistrictOnlyCovidAutomatData = new CovidAutomat_TestData_line { Date = DateTime.Now, Vaccination_Full = "0,00%", SevenDaysIncidencyActual = 0, SevenDaysIncidencyBefore = 0, DistrictPopulation = 0 };
 
             //initialize CSV parser
             CsvParserOptions csvParserOptions = new CsvParserOptions(true, ';');
@@ -117,7 +117,7 @@ namespace CoronaData.Controllers
 
             //fetch data for CovidAutomat report
             #region CovidAutomat data processing
-            var covidAutomatCsvParser = new CsvParser<CovidAutomat_TestData_line>(csvParserOptions, new CsvCovidAutomatCoronaDataMapping());
+            var covidAutomatCsvParser = new CsvParser<CovidAutomat_TestData_line>(new CsvParserOptions(true, ','), new CsvCovidAutomatCoronaDataMapping());
             var allCovidAutomatRecords = covidAutomatCsvParser.ReadFromFile(GetCovidAutomatLocalFilePath(), Encoding.UTF8).ToList();
             #endregion CovidAutomat data processing
 
@@ -153,7 +153,7 @@ namespace CoronaData.Controllers
                 AllDataAG = selectedDistrictOnlyAgData,
                 AllDataPCR = selectedDistrictOnlyPcrData,
                 SelectedDistrict = selectedDistrict,
-                LastCovidAutomatData = selectedDistrictOnlyCovidAutomatData != null ? selectedDistrictOnlyCovidAutomatData : new CovidAutomat_TestData_line { Date = DateTime.Now, Hospitalisation = 0, SevenDaysIncidencyActual = 0, SevenDaysIncidencyBefore = 0, DistrictPopulation = 0 }
+                LastCovidAutomatData = selectedDistrictOnlyCovidAutomatData != null ? selectedDistrictOnlyCovidAutomatData : new CovidAutomat_TestData_line { Date = DateTime.Now, Vaccination_Full = "0,00%", SevenDaysIncidencyActual = 0, SevenDaysIncidencyBefore = 0, DistrictPopulation = 0 }
             };
         }
 

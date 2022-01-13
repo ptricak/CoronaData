@@ -34,7 +34,7 @@ namespace CoronaData.Mappers
 
         public bool TryConvert(string value, out DateTime result)
         {
-            result = DateTime.ParseExact(value, "d.M.yyyy", CultureInfo.InvariantCulture);
+            result = DateTime.ParseExact(value, "M/d/yyyy", CultureInfo.InvariantCulture);
 
             return true;
         }
@@ -58,6 +58,23 @@ namespace CoronaData.Mappers
         }
     }
 
+    public class PopulationStringToIntTypeConverter : ITypeConverter<int>
+    {
+        public Type TargetType => typeof(int);
+
+        public bool TryConvert(string value, out int result)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                result = 0;
+            else
+            {
+                result = int.Parse(value.RemoveWhitespaceAndDelimiters());
+            }
+
+            return true;
+        }
+    }
+
     #region Helpers
     public static class MappingHelper
     {
@@ -65,6 +82,13 @@ namespace CoronaData.Mappers
         {
             return new string(input.ToCharArray()
                 .Where(c => !Char.IsWhiteSpace(c))
+                .ToArray());
+        }
+
+        public static string RemoveWhitespaceAndDelimiters(this string input)
+        {
+            return new string(input.ToCharArray()
+                .Where(c => !Char.IsWhiteSpace(c) && !c.Equals(',') && !c.Equals('.'))
                 .ToArray());
         }
     }

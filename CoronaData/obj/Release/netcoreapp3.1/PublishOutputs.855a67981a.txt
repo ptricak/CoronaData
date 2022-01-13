@@ -2,6 +2,7 @@
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/css/all.min.css
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/css/sb-admin-2.min.css
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/css/site.css
+/Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/DataFiles/.DS_Store
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/DataFiles/agTestData.csv
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/DataFiles/covidAutomatTestData.csv
 /Users/Peter/Projects/CoronaData/CoronaData/bin/Release/netcoreapp3.1/publish/wwwroot/DataFiles/pcrTestData.csv

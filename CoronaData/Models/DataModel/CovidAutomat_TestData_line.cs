@@ -42,8 +42,8 @@ namespace CoronaData.Models.DataModel
         public int SevenDaysIncidencyBefore { get; set; }
 
         /// <summary>
-        /// Number of hospitalised people count.
+        /// Full vaccination percentage.
         /// </summary>
-        public int Hospitalisation { get; set; }
+        public string Vaccination_Full { get; set; }
     }
 }
